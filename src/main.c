@@ -66,18 +66,18 @@ int main(int argc, char **argv)
     }
 
     // Parse input.
-    parse(input);
+    parse(input, MAX_PROCESS_COUNT);
 
-    // Parse for all possible 100 processes.
-    for (i = 0; i < MAX_PROCESS_COUNT; i++)
-    {
-        if (DEBUG == 1)
-        {
-            printf("%s\t", input[i]);
-            result = parse(input[i]);
-            printf("result code returned from parse(): %d\n", result);
-        }
-    }
+//    // Parse for all possible 100 processes.
+//    for (i = 0; i < MAX_PROCESS_COUNT; i++)
+//    {
+//        if (DEBUG == 1)
+//        {
+//            printf("%s\t", input[i]);
+//            result = parse(input[i]);
+//            printf("result code returned from parse(): %d\n", result);
+//        }
+//    }
 
     // Deallocate input.
     if (input != NULL)

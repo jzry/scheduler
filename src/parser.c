@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <ctype.h>
 
 #include "../include/definitions.h"
 
@@ -12,9 +13,11 @@
 #define PROCESS 5
 #define SUCCESS 6
 
+#define DEBUG 1
+
 int parse(char **input, int MAX_PROCESS_COUNT)
 {
-    int i;
+    int i, result;
 
     if (input == NULL)
     {
@@ -26,16 +29,29 @@ int parse(char **input, int MAX_PROCESS_COUNT)
         if (strcmp(input[i], "processcount") == 0)
         {
             // Prevents dereferencing null pointer if on last process count.
-            (i == MAX_PROCESS_COUNT - 1) ? return ERROR : i++;
-
-            if (isdigit(input[i]) > 1)
+            if (i == MAX_PROCESS_COUNT - 1)
             {
-                result = atoi(input[i] - '0');
+                return ERROR;
+            }
+            else
+            {
+                i++;
+            }
+
+            if (isdigit(input[i][0]) > 1)
+            {
+                result = atoi(input[i]);
+
+                if (DEBUG == 1)
+                {
+                    printf("result in parser(): %d\n", result);
+                }
             }
             else
             {
                 return ERROR;
             }
+
             return PROCESS_COUNT;
         }
         else if (strcmp(input[i], "runfor") == 0)
