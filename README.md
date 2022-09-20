@@ -64,3 +64,43 @@ Finished at time 15
 P1 wait 5 turnaround 10
 P2 wait 5 turnaround 14
 ```
+
+## Parsing input
+A series of if and else statements will catch keywords and ignore incorrect syntax.
+
+### Keywords
+- processcount
+    + catch number
+- runfor
+    + catch number
+- use
+    + catch process (fcfs, sjf, rr)
+- quantum
+    + catch quantum time
+- process
+    + catch name
+        + catch catch arrival
+            + catch burst
+- end
+
+pcb *processes:
+
+```
+typedef struct fcfs
+{
+    char *name;
+    int burst
+    int wait
+} fcfs
+
+    0   1   2   3   4   5   6   7   8
+0   +---+---+---+---+---+---+---+---+---+
+    | p | r | o | c | e | s | s |   | \0|
+1   +---+---+---+---+---+---+---+---+---+
+    | r | u | n |   |   |   |   |   | \0|
+2   +---+---+---+---+---+---+---+---+---+
+    | l | o | l |   |   |   |   |   | \0|
+3   +---+---+---+---+---+---+---+---+---+
+    | d | o |   |   |   |   |   |   | \0|
+    +---+---+---+---+---+---+---+---+---+
+```

@@ -1,7 +1,27 @@
 #ifndef __DEFS_H
 #define __DEFS_H
 
-// ----------- Shortest Job First -----------
+// ----------- First Come First Serve -----------
+
+int proc_ready(pcb &p) {
+    p.state = READY
+    p.schedule.arrival = now()
+    ready_queue.enqueue(p)
+}
+
+int select_proc()
+{
+    pcb p
+    p = find_minimum<pcb>
+    (
+     each rqp in ready_queue,
+     rqp.schedule.arrival
+     )
+    ready_queue.delete(p)
+    dispatch(p)
+}
+
+// ----------- Shortest Job First (Preemptive) -----------
 
 int proc_ready(pcb *p)
 {
@@ -40,26 +60,6 @@ int select_proc()
                           each rqp in ready_queue,
                           rqp.schedule.est_length
                           )
-    ready_queue.delete(p)
-    dispatch(p)
-}
-
-// ----------- First Come First Serve -----------
-
-int proc_ready(pcb &p) {
-    p.state = READY
-    p.schedule.arrival = now()
-    ready_queue.enqueue(p)
-}
-
-int select_proc()
-{
-    pcb p
-    p = find_minimum<pcb>
-    (
-     each rqp in ready_queue,
-     rqp.schedule.arrival
-     )
     ready_queue.delete(p)
     dispatch(p)
 }

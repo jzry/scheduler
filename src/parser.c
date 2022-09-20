@@ -1,45 +1,63 @@
 #include <stdio.h>
-#include <string.h>
 #include <stdlib.h>
+#include <string.h>
 
-#DEFINE PROCESS_COUNT 1
-#DEFINE RUN 2
-#DEFINE USE 3
-#DEFINE QUANTUM 4
-#DEFINE PROCESS 5
-#DEFINE ERROR -1
+#include "../include/definitions.h"
 
-int parser(char *str)
+#define ERROR -1
+#define PROCESS_COUNT 1
+#define RUN 2
+#define USE 3
+#define QUANTUM 4
+#define PROCESS 5
+#define SUCCESS 6
+
+int parse(char **input, int MAX_PROCESS_COUNT)
 {
-    if (str == NULL)
+    int i;
+
+    if (input == NULL)
     {
         return ERROR;
     }
 
-    if (str == "processcount")
+    for (i = 0; i < MAX_PROCESS_COUNT; i++)
     {
-        return PROCESS_COUNT;
-    }
-    else if (str == "runfor")
-    {
-        return RUN;
-    }
-    else if (str == "use")
-    {
-        return USE;
-    }
-    else if (str == "quantum")
-    {
-        return QUANTUM;
-    }
-    else if (str == "process")
-    {
-        return PROCESS;
-    }
-    else
-    {
-        printf("UNKNOWN TOKEN ERROR: parser() in parser.c\n");
-        return ERROR;
+        if (strcmp(input[i], "processcount") == 0)
+        {
+            // Prevents dereferencing null pointer if on last process count.
+            (i == MAX_PROCESS_COUNT - 1) ? return ERROR : i++;
+
+            if (isdigit(input[i]) > 1)
+            {
+                result = atoi(input[i] - '0');
+            }
+            else
+            {
+                return ERROR;
+            }
+            return PROCESS_COUNT;
+        }
+        else if (strcmp(input[i], "runfor") == 0)
+        {
+            return RUN;
+        }
+        else if (strcmp(input[i], "use") == 0)
+        {
+            return USE;
+        }
+        else if (strcmp(input[i], "quantum") == 0)
+        {
+            return QUANTUM;
+        }
+        else if (strcmp(input[i], "process") == 0)
+        {
+            return PROCESS;
+        }
+        else
+        {
+            return ERROR;
+        }
     }
 
     return ERROR;
