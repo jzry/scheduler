@@ -44,7 +44,10 @@ char *destroyInput(char **input, int processcount)
             }
         }
 
-        free(input);
+        if (input != NULL)
+        {
+            free(input);
+        }
     }
 
     return NULL;
@@ -128,7 +131,7 @@ int main(int argc, char **argv)
         // printArray(input, processcount);
     }
 
-    // Tokenize each word from the input into the process struct.
+    // Extract relevant information from the input into the process struct.
     if ((processes = parse(input, total_input_size, processcount)) == NULL)
     {
         printf("ERROR: Failure to collect processes\n");
@@ -137,9 +140,17 @@ int main(int argc, char **argv)
 
     if (DEBUG == 1)
     {
+        // Check if processes is formed properly.
         testProcesses(processes, processcount);
     }
 
+    // CPU scheduling algorithms.
+    roundRobin(processes);
+    firstComeFirstServe(processes);
+    shortestJobFirst(processes);
+
+
+    // De-allocation fluff.
     destroyInput(input, processcount);
     destroyProcesses(processes, processcount);
 

@@ -46,7 +46,7 @@ process_node *createProcessArray(int processcount)
     process_node *p_node;
     int i;
 
-    if ((p_node = malloc(sizeof(process_node *) * processcount)) == NULL)
+    if ((p_node = malloc(sizeof(process_node) * processcount)) == NULL)
     {
         printf("ERROR: createProcessArray failed\n");
         return NULL;
