@@ -4,6 +4,7 @@
 
 #include "parser.c"
 #include "process.h"
+#include "main.c"
 
 #define DEBUG 1
 #define BASE_WORDS 37
@@ -144,11 +145,25 @@ int main(int argc, char **argv)
         testProcesses(processes, processcount);
     }
 
-    // CPU scheduling algorithms.
     roundRobin(processes);
-    firstComeFirstServe(processes);
-    shortestJobFirst(processes);
 
+    // CPU scheduling algorithms.
+//    if (processes->type == FCFS)
+//    {
+//        firstComeFirstServe(processes);
+//    }
+//    else if (processes->type == RR)
+//    {
+//        roundRobin(processes);
+//    }
+//    else if (processes->type == SJF)
+//    {
+//        shortestJobFirst(processes);
+//    }
+//    else
+//    {
+//        printf("ERROR: Job type for processes does not exist\n");
+//    }
 
     // De-allocation fluff.
     destroyInput(input, processcount);

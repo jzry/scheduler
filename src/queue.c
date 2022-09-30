@@ -1,12 +1,14 @@
 #include <stdio.h>
+#include <limits.h>
 
 #include "process.h"
 
 #define EMPTY_LIST_ERR INT_MIN
+#define EMPTY_QUEUE_ERR INT_MIN
 
 typedef struct node
 {
-    int data;
+    process_node *data;
     struct node *next;
 } node;
 
@@ -22,17 +24,67 @@ typedef struct Queue
     int size;
 } Queue;
 
-// Create a queue.
-Queue *createQueue(void)
+// =========================== Linked List Definitions ===========================
+
+node *create_node(process_node *data)
 {
-    Queue *q = malloc(sizeof(Queue));
-    q->list = create_list();
-    q->size = 0;
-    return q;
+    node *n = malloc(sizeof(node));
+    n->data = data;
+    n->next = NULL;
+    return n;
 }
 
-// Destroy linked list recursively (for queue).
-QueueNode *recursive_destroyer(QueueNode *head)
+LinkedList *create_list(void)
+{
+    return calloc(1, sizeof(LinkedList));
+}
+
+void tail_insert(LinkedList *list, process_node *data)
+{
+    if (list == NULL)
+    {
+        return;
+    }
+
+    if (list->tail == NULL)
+    {
+        list->head = list->tail = create_node(data);
+        return;
+    }
+
+    list->tail->next = create_node(data);
+    list->tail = list->tail->next;
+}
+
+process_node *head_delete(LinkedList *list)
+{
+    process_node *retval;
+    node *temp;
+
+    if (list == NULL || list->head == NULL)
+    {
+        return NULL;
+    }
+
+    retval = list->head->data;
+
+    temp = list->head->next;
+
+    free(list->head);
+
+    list->head = temp;
+
+    if (list->head == NULL)
+    {
+        list->tail = NULL;
+    }
+
+    return retval;
+}
+
+// =========================== Queue definitions ===========================
+
+node *recursive_destroyer(node *head)
 {
     if (head == NULL)
     {
@@ -45,7 +97,6 @@ QueueNode *recursive_destroyer(QueueNode *head)
     return NULL;
 }
 
-// Destroy a list for a queue.
 LinkedList *destroy_list(LinkedList *list)
 {
     if (list == NULL)
@@ -69,7 +120,7 @@ Queue *destroyQueue(Queue *q)
 
     if (q->list != NULL)
     {
-        q->list = destroyList(q->list);
+        q->list = destroy_list(q->list);
     }
 
     if (q != NULL)
@@ -81,6 +132,15 @@ Queue *destroyQueue(Queue *q)
     return NULL;
 }
 
+// Create a queue.
+Queue *createQueue(void)
+{
+    Queue *q = malloc(sizeof(Queue));
+    q->list = create_list();
+    q->size = 0;
+    return q;
+}
+
 // Check if a queue contains elements.
 int isEmpty(Queue *q)
 {
@@ -88,7 +148,7 @@ int isEmpty(Queue *q)
 }
 
 // Insert element at back of queue (using tail insertion).
-void enqueue(Queue *q, int data)
+void enqueue(Queue *q, process_node *data)
 {
     if (q == NULL || q->list == NULL)
     {
@@ -100,28 +160,30 @@ void enqueue(Queue *q, int data)
 }
 
 // Remove front of queue (using head removal).
-int dequeue(Queue *q)
+process_node *dequeue(Queue *q)
 {
     if (isEmpty(q))
-        return EMPTY_QUEUE_ERR;
+    {
+        return NULL;
+    }
 
     q->size--;
     return head_delete(q->list);
 }
 
 // Peek at the front of the queue without dequeueing.
-int front(Queue *q)
+process_node *front(Queue *q)
 {
     if (isEmpty(q))
-        return EMPTY_QUEUE_ERR;
+    {
+        return NULL;
+    }
 
     return q->list->head->data;
 }
 
-// FIFO - First in first out
-
-// Front
-// Dequeue
-// Enqueue
-// isEmpty
-//
+// Return current size of a queue.
+int size(Queue *q)
+{
+    return (q == NULL) ? 0 : q->size;
+}

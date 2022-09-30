@@ -2,21 +2,23 @@
 
 ## The CPU Scheduler
 - The processor selects a process from the ready queue to run
-- Scheduler runs when a running process halts for some reason
-- Dispatcher is part of the CPU scheduler that actually does the context switching once the new process is selected
+- Scheduler runs when a running process halts to let the next process run
+- Dispatcher is part of the CPU scheduler that actually does the context switching from one process to another once the new process is selected
+- Scheduling is the process of assigning processor resources to complete tasks, or processes
+- Preemptive algorithms work more effectively for multitasking systems because they have a built in interrupt which prevents starvation in CPU schedulers, so every process has an equal chance to execute until termination.
 
 ## Scheduling criteria
 - Scheduling algorithms are trying to achieve the best:
-- CPU Utilization - Keep the CPU as busy as possible so to avoid wasting hardware time
-- Throughput - The number of processes completed per time unit
-- Turnaround time - For a given process, how long it takes to execute that process from start to finish
-- Waiting time - The amount of time a process is reading without running
-- Response time - The time between when a user submits a request and the first output to that user
+- **CPU Utilization** - Keep the CPU as busy as possible so to avoid wasting hardware time
+- **Throughput** - The number of processes completed per time unit
+- **Turnaround time** - For a given process, how long it takes to execute that process from start to finish
+- **Waiting time** - The amount of time a process is reading without running
+- **Response time** - The time between when a user submits a request and the first output to that user
 
 ## Scheduling Algorithms
-- First come first served
-- Shortest Job First
-- Round-Robin
+- **First come first served**: Processes are executed in the order they arrive. Not the most efficient way to schedule tasks because certain tasks may run forever. 
+- **Preemptive Shortest Job First**: 
+- **Round-Robin**: The scheduler assigns a fixed time unit per process, called a time *quantum*. If one process completes within that process it gets terminated, but if it doesn't, it gets rescheduled to the back of the queue.
 
 ## First Come, First Serve
 Processes are allocated to the CPU and executed in the CPU in the order in which they arrive.
@@ -28,7 +30,7 @@ Processes are allocated to the CPU in the order of the processes that have the s
 Uses a time interrupt using a preset time quantum to stop a process
 
 
-## Input
+## Example Input
 
 ```
 processcount 2        # Read 5 processes
@@ -40,7 +42,7 @@ process name P2 arrival 0 burst 9
 end
 ```
 
-## Output
+## Example Output
 
 ```
 2 processes
@@ -66,7 +68,7 @@ P2 wait 5 turnaround 14
 ```
 
 ## Parsing input
-A series of if and else statements will catch keywords and ignore incorrect syntax.
+Scheduler uses a series of decision statements to catch keywords from input file.
 
 ### Keywords
 - processcount
@@ -76,23 +78,35 @@ A series of if and else statements will catch keywords and ignore incorrect synt
 - use
     + catch process (fcfs, sjf, rr)
 - quantum
-    + catch quantum time
+    + catch time
 - process
     + catch name
-        + catch catch arrival
+        + catch arrival
             + catch burst
 - end
-
-pcb *processes:
+    + break
 
 ```
-typedef struct fcfs
+JobType {FCFS, SJF, RR} JobType;
+
+typedef struct process_node
 {
     char *name;
-    int burst
-    int wait
-} fcfs
+    int burst;
+    int arrival;
+} process_node;
 
+typedef struct Processes
+{
+    process_node *process_array;
+    int num_of_proc;
+    JobType type;
+    int runfor;
+    int quantum;
+} Processes;
+
+
+char **input:
     0   1   2   3   4   5   6   7   8
 0   +---+---+---+---+---+---+---+---+---+
     | p | r | o | c | e | s | s |   | \0|
@@ -103,4 +117,62 @@ typedef struct fcfs
 3   +---+---+---+---+---+---+---+---+---+
     | d | o |   |   |   |   |   |   | \0|
     +---+---+---+---+---+---+---+---+---+
+    
+Process **processes:
+    0x123
+    +-----+
+    | 0x1 |
+    +-----+
+    
+    0x1
+    +---------------------------------+
+    |process_node *process_array: 0x22|
+    |int num_of_proc;                 |
+    |JobType type; (FCFS, SJF, RR)    |
+    |int runfor;                      |
+    |int quantum;                     |
+    +---------------------------------+
+    
+processes->process_array:
+    0x22
+    +---+---+---+---+---+---+---+---+---+
+    |0x3|0x4|0x5|0x6|   |   |   |   |   |
+    +---+---+---+---+---+---+---+---+---+
+      0   1   2   3    ...
+     
+temp = processes->process_array;
+     
+processes->process_array[0]:
+    0x22
+    +--------+
+    |  0x3   |
+    +--------+
+
+process_node *process_array:
+    0x3:
+    (char *name; int burst; int arrival;)
+    0x4:
+    (char *name; int burst; int arrival;)
+    ...
+    
+Queue *q:
+    0x66
+    +------------------------+
+    | LinkedList *l: 0x99    |
+    | int size n;            |
+    +------------------------+
+
+LinkedList *ll:
+    0x99
+    +------------------------+
+    | node *head: 0x33       |
+    | node *tail: 0x44       |
+    +------------------------+
+        
+Node *node:        
+    0x33                                0x44
+    +---------------------------+       +---------------------------+    
+    | p->process_array[0]: 0x3  |  ->   | p->process_array[1]: 0x4  | -> NULL
+    | struct p_node *next: 0x44 |       | struct p_node *next: NULL |
+    +---------------------------+       +---------------------------+
 ```
