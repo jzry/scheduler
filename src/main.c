@@ -4,7 +4,7 @@
 
 #include "parser.c"
 #include "process.h"
-#include "main.c"
+#include "scheduling.c"
 
 #define DEBUG 1
 #define BASE_WORDS 37

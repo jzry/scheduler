@@ -1,6 +1,7 @@
 #include <stdio.h>
 
 #include "process.h"
+#include "queue.h"
 
 void swap(process_node *process_array, int i, int j)
 {
@@ -8,13 +9,13 @@ void swap(process_node *process_array, int i, int j)
 
     temp = &process_array[i];
     process_array[i] = process_array[j];
-    process_array[j] = temp;
+    process_array[j] = *temp;
 }
 
 // Sorting algorithm to sort proccess_array from least to greatest arrival time.
 void bubble_sort(process_node *process_array, int n)
 {
-    int i, swapped = 1;
+    int i, swapped = 1, j;
 
     if (process_array == NULL)
     {
@@ -38,11 +39,10 @@ void bubble_sort(process_node *process_array, int n)
 }
 
 // Simulate round robin CPU scheduling algorithm.
-void roundRobin(Process *p)
+void roundRobin(Processes *p)
 {
     Queue *q;
     int i, j;
-    int *array;
 
     if (p == NULL)
     {
@@ -68,7 +68,7 @@ void roundRobin(Process *p)
     {
         for (j = 0; j < p->process_array[j].burst; j++)
         {
-            printf("Time %d: Process %d arrived", i, p->process_array[j].name);
+            printf("Time %d: Process %s arrived\n", i, p->process_array[j].name);
         }
 
         // Stop the process and increment for the next one.
@@ -79,15 +79,10 @@ void roundRobin(Process *p)
     }
 
     destroyQueue(q);
-
-    if (array != NULL)
-    {
-        free(array);
-    }
 }
 
 // Simulate Shortest Job First CPU scheduling algorithm.
-void shortestJobFirst(Process *p);
+void shortestJobFirst(Processes *p);
 
 // Simulate First Come First Serve CPU scheduling algorithm.
-void firstComeFirstServe(Process *p);
+void firstComeFirstServe(Processes *p);

@@ -34,9 +34,19 @@ node *create_node(process_node *data)
     return n;
 }
 
+// Create a linked list.
 LinkedList *create_list(void)
 {
     return calloc(1, sizeof(LinkedList));
+}
+
+// Create a queue.
+Queue *createQueue(void)
+{
+    Queue *q = malloc(sizeof(Queue));
+    q->list = create_list();
+    q->size = 0;
+    return q;
 }
 
 void tail_insert(LinkedList *list, process_node *data)
@@ -130,15 +140,6 @@ Queue *destroyQueue(Queue *q)
     }
 
     return NULL;
-}
-
-// Create a queue.
-Queue *createQueue(void)
-{
-    Queue *q = malloc(sizeof(Queue));
-    q->list = create_list();
-    q->size = 0;
-    return q;
 }
 
 // Check if a queue contains elements.
