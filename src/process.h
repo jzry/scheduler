@@ -137,6 +137,7 @@ void testProcesses(Processes *p, int processcount)
     }
 
     printf("==============================\n\n");
+    printf("INSIDE PROCESSES BLOCK:\n\n");
 
     printf("processes->num_of_proc: %d\n", p->num_of_proc);
     printf("processes->runfor: %d\n", p->runfor);

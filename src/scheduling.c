@@ -3,41 +3,6 @@
 #include "process.h"
 #include "queue.h"
 
-void swap(process_node *process_array, int i, int j)
-{
-    process_node *temp;
-
-    temp = &process_array[i];
-    process_array[i] = process_array[j];
-    process_array[j] = *temp;
-}
-
-// Sorting algorithm to sort process_array from least to greatest arrival time.
-void bubble_sort(process_node *process_array, int n)
-{
-    int i, swapped = 1, j;
-
-    if (process_array == NULL)
-    {
-        return;
-    }
-
-    while (swapped)
-    {
-        swapped = 0;
-
-        for (i = 0; i < n - 1 - j; i++)
-        {
-            if (process_array[i].burst > process_array[i + 1].burst)
-            {
-                swap(process_array, i, i + 1);
-                swapped = 1;
-            }
-        }
-        ++j;
-    }
-}
-
 // Simulate preemptive round robin CPU scheduling algorithm.
 void roundRobin(Processes *p)
 {
@@ -55,9 +20,6 @@ void roundRobin(Processes *p)
         return;
     }
 
-    // Sort the process array from least arrival time to greatest.
-    bubble_sort(p->process_array, p->num_of_proc);
-
     // Necessary messages.
     printf("%d processes\n", p->num_of_proc);
     printf("Using Round-Robin\n");
@@ -65,27 +27,29 @@ void roundRobin(Processes *p)
 
     if (DEBUG == 1)
     {
+        printf("Inside round robin process array: \n");
         for (i = 0; i < p->num_of_proc; i++)
         {
             printf("Process %d name %s burst %d\n", i, p->process_array[i].name, p->process_array[i].burst);
         }
+        printf("\ndaod");
     }
 
     for (i = 0; i < p->runfor; i++)
     {
         for (j = 0; j < p->process_array[proc_index].burst; j++)
         {
+            // Print message for process arrival.
+            if (p->process_array[proc_index].arrival == i)
+            {
+                printf("Time %d: %s arrived\n", i, p->process_array[proc_index].name);
+            }
+
             // If burst runs out, then process terminates.
             if (p->process_array[proc_index].burst == 0)
             {
                 printf("Time %d: %s finished\n", i, p->process_array[proc_index].name);
                 continue;
-            }
-
-            // Print message for process arrival.
-            if (p->process_array[proc_index].arrival == i)
-            {
-                printf("Time %d: %s arrived\n", i, p->process_array[proc_index].name);
             }
 
             // Print selection message after every burst quantum.
@@ -97,6 +61,16 @@ void roundRobin(Processes *p)
                 p->process_array[proc_index].burst = p->process_array[proc_index].burst - p->quantum;
 
                 j = j + p->quantum;
+
+                // Increment the process index back to cycle to the beginning.
+                if (proc_index == p->num_of_proc - 1)
+                {
+                    proc_index = 0;
+                }
+                else
+                {
+                    proc_index++;
+                }
             }
         }
     }
@@ -105,7 +79,7 @@ void roundRobin(Processes *p)
 
     // Waiting time = The total time a process is ready without running or a process total runtime.
     // Turnaround time = The total time a process takes to finish from start to finish.
-    printf("%s wait %d turnaround %d", p->process_array[i].name, wait, turnaround);
+    printf("%s wait %d turnaround %d\n", p->process_array[i].name, wait, turnaround);
 
     destroyQueue(q);
 }

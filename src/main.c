@@ -10,6 +10,49 @@
 #define BASE_WORDS 37
 #define WORDS_PER_PROC 7
 
+void swap(Processes *p, int i, int j)
+{
+    process_node temp;
+
+    printf("swap() p->process_array[%d]: %p\n", i, &p->process_array[i]);
+    printf("swap() p->process_array[%d]: %p\n", j, &p->process_array[j]);
+
+    temp = p->process_array[i];
+    p->process_array[i] = p->process_array[j];
+    p->process_array[j] = temp;
+}
+
+// Sorting algorithm to sort process_array from least to greatest arrival time.
+void bubble_sort(Processes *p)
+{
+    int i, swapped = 1, j = 0;
+
+    if (p == NULL)
+    {
+        return;
+    }
+
+    if (p->process_array == NULL)
+    {
+        return;
+    }
+
+    while (swapped)
+    {
+        swapped = 0;
+
+        for (i = 0; i < p->num_of_proc - 1 - j; i++)
+        {
+            if (p->process_array[i].arrival > p->process_array[i + 1].arrival)
+            {
+                swap(p, i, i + 1);
+                swapped = 1;
+            }
+        }
+        ++j;
+    }
+}
+
 void printArray(char **input, int processcount)
 {
     int i;
@@ -143,6 +186,28 @@ int main(int argc, char **argv)
     {
         // Check if processes is formed properly.
         testProcesses(processes, processcount);
+    }
+
+    // Sort the processes by least arrival time to greatest.
+    bubble_sort(processes);
+
+    if (DEBUG == 1)
+    {
+        printf("After sorting the processes based on arrival time:\n");
+
+        // Check if processes is formed properly.
+        testProcesses(processes, processcount);
+    }
+
+    if (DEBUG == 1)
+    {
+        printf("In main process array: \n");
+        
+        // Check if the processes are sorted by least amount of processes to greatest.
+        for (i = 0; i < processes->num_of_proc; i++)
+        {
+            printf("process name: %s, arrival: %d, burst: %d in main()\n", processes->process_array[i].name, processes->process_array[i].arrival, processes->process_array[i].burst);
+        }
     }
 
     roundRobin(processes);
