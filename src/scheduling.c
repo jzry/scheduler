@@ -12,7 +12,7 @@ void swap(process_node *process_array, int i, int j)
     process_array[j] = *temp;
 }
 
-// Sorting algorithm to sort proccess_array from least to greatest arrival time.
+// Sorting algorithm to sort process_array from least to greatest arrival time.
 void bubble_sort(process_node *process_array, int n)
 {
     int i, swapped = 1, j;
@@ -38,11 +38,11 @@ void bubble_sort(process_node *process_array, int n)
     }
 }
 
-// Simulate round robin CPU scheduling algorithm.
+// Simulate preemptive round robin CPU scheduling algorithm.
 void roundRobin(Processes *p)
 {
     Queue *q;
-    int i, j;
+    int i, j, wait, turnaround, proc_index = 0;
 
     if (p == NULL)
     {
@@ -63,20 +63,49 @@ void roundRobin(Processes *p)
     printf("Using Round-Robin\n");
     printf("Quantum %d\n\n", p->quantum);
 
-    // Simulate CPU scheduler using round robin.
-    for (i = 0; i < p->runfor; i++)
+    if (DEBUG == 1)
     {
-        for (j = 0; j < p->process_array[j].burst; j++)
+        for (i = 0; i < p->num_of_proc; i++)
         {
-            printf("Time %d: Process %s arrived\n", i, p->process_array[j].name);
-        }
-
-        // Stop the process and increment for the next one.
-        if (i != 0 && i % 2 == 0)
-        {
-
+            printf("Process %d name %s burst %d\n", i, p->process_array[i].name, p->process_array[i].burst);
         }
     }
+
+    for (i = 0; i < p->runfor; i++)
+    {
+        for (j = 0; j < p->process_array[proc_index].burst; j++)
+        {
+            // If burst runs out, then process terminates.
+            if (p->process_array[proc_index].burst == 0)
+            {
+                printf("Time %d: %s finished\n", i, p->process_array[proc_index].name);
+                continue;
+            }
+
+            // Print message for process arrival.
+            if (p->process_array[proc_index].arrival == i)
+            {
+                printf("Time %d: %s arrived\n", i, p->process_array[proc_index].name);
+            }
+
+            // Print selection message after every burst quantum.
+            if ((j % p->quantum) == 0)
+            {
+                printf("Time %d: %s selected (burst %d)\n", i, p->process_array[proc_index].name, p->process_array[proc_index].burst);
+
+                // Decrement burst amount according to quantum slice.
+                p->process_array[proc_index].burst = p->process_array[proc_index].burst - p->quantum;
+
+                j = j + p->quantum;
+            }
+        }
+    }
+
+    printf("Finished at time %d\n\n", p->runfor);
+
+    // Waiting time = The total time a process is ready without running or a process total runtime.
+    // Turnaround time = The total time a process takes to finish from start to finish.
+    printf("%s wait %d turnaround %d", p->process_array[i].name, wait, turnaround);
 
     destroyQueue(q);
 }
