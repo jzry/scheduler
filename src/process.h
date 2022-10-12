@@ -9,6 +9,9 @@
 // FCFS = 0, SJF = 1, RR = 2.
 typedef enum JobType {FCFS, SJF, RR} JobType;
 
+// READY = 0, RUN = 1, WAIT = 2, DONE = 3.
+typedef enum Status {READY, RUN, WAIT, DONE} Status;
+
 typedef struct process_node
 {
     // Process name.
@@ -20,6 +23,15 @@ typedef struct process_node
 
     // Time period that a process begins to execute.
     int arrival;
+
+    // The total duration a process has to wait for another process to finish running up until the process finishes.
+    int wait;
+
+    // The total duration of a process from arrival to finish statement.
+    int turnaround;
+
+    // Status of the process.
+    Status status;
 } process_node;
 
 typedef struct Processes
@@ -57,6 +69,9 @@ process_node *createProcessArray(int processcount)
         p_node[i].name = NULL;
         p_node[i].burst = 0;
         p_node[i].arrival = 0;
+
+        // Each process begins at ready by default.
+        p_node[i].status = READY;
     }
 
     return p_node;
@@ -163,6 +178,7 @@ void testProcesses(Processes *p, int processcount)
         printf("process->process_array[%d].name: %s\n", i, p->process_array[i].name);
         printf("process->process_array[%d].arrival: %d\n", i, p->process_array[i].arrival);
         printf("process->process_array[%d].burst: %d\n", i, p->process_array[i].burst);
+        printf("process->process_array[%d].status: %d\n", i, p->process_array[i].status);
     }
 
     printf("\n\n==============================\n");

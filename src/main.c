@@ -14,8 +14,11 @@ void swap(Processes *p, int i, int j)
 {
     process_node temp;
 
-    printf("swap() p->process_array[%d]: %p\n", i, &p->process_array[i]);
-    printf("swap() p->process_array[%d]: %p\n", j, &p->process_array[j]);
+    if (DEBUG == 1)
+    {
+        printf("swap() p->process_array[%d]: %p\n", i, &p->process_array[i]);
+        printf("swap() p->process_array[%d]: %p\n", j, &p->process_array[j]);
+    }
 
     temp = p->process_array[i];
     p->process_array[i] = p->process_array[j];

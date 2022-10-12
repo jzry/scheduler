@@ -148,7 +148,7 @@ int isEmpty(Queue *q)
     return (q == NULL || q->size == 0);
 }
 
-// Insert element at back of queue (using tail insertion).
+// Insert element at back of queue (using tail insertion). Update status.
 void enqueue(Queue *q, process_node *data)
 {
     if (q == NULL || q->list == NULL)
@@ -156,6 +156,7 @@ void enqueue(Queue *q, process_node *data)
         return;
     }
 
+    // Increment size.
     q->size++;
     tail_insert(q->list, data);
 }
@@ -181,10 +182,4 @@ process_node *front(Queue *q)
     }
 
     return q->list->head->data;
-}
-
-// Return current size of a queue.
-int size(Queue *q)
-{
-    return (q == NULL) ? 0 : q->size;
 }

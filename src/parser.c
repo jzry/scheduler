@@ -14,6 +14,7 @@
 
 #define DEBUG 1
 
+// Create a fully formed process block that contains a process array containing relevant processes.
 Processes *parse(char **input, int total_input_size, int MAX_PROCESS_COUNT)
 {
     Processes *processes;
