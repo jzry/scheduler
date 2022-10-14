@@ -106,35 +106,29 @@ Processes *destroyProcesses(Processes *p, int processcount)
     {
         for (i = 0; i < processcount; i++)
         {
-            if (p->process_array[i].name != NULL)
+            if (p->process_array != NULL)
             {
-//                if (DEBUG == 1)
-//                {
-//                    printf("p->process_array[%d].name in destroyProcesses: %p\n", i, p->process_array[i].name);
-//                }
+                if (p->process_array[i].name != NULL)
+                {
+                    // Free name first.
+                    free(p->process_array[i].name);
+                }
 
-                free(p->process_array[i].name);
+                // Then free actual array.
+                free(p->process_array);
+
+                p->process_array = NULL;
             }
         }
 
         if (p->process_array != NULL)
         {
-//            if (DEBUG == 1)
-//            {
-//                printf("p->process_array in destroyProcesses: %p\n", p->process_array);
-//            }
-
             free(p->process_array);
         }
     }
 
     if (p != NULL)
     {
-//        if (DEBUG == 1)
-//        {
-//            printf("p in destroyProcesses: %p\n", p);
-//        }
-
         free(p);
     }
 

@@ -7,8 +7,6 @@
 #include "scheduling.c"
 
 #define DEBUG 1
-#define BASE_WORDS 37
-#define WORDS_PER_PROC 7
 
 void swap(Processes *p, int i, int j)
 {
@@ -88,6 +86,7 @@ char *destroyInput(char **input, int processcount)
             if (input[i] != NULL)
             {
                 free(input[i]);
+                input[i] = NULL;
             }
         }
 
@@ -104,7 +103,7 @@ int main(int argc, char **argv)
 {
     FILE *ifp;
     char buffer[1024], **input, row = 0;
-    int i, len, processcount, total_input_size;
+    int i, len, processcount = 0, total_input_size = 0, BASE_WORDS = 37, WORDS_PER_PROC = 7;
     Processes *processes;
 
     if (argc < 2)
@@ -166,7 +165,7 @@ int main(int argc, char **argv)
 
         if (DEBUG == 1)
         {
-             printf("%s\n", input[row]);
+//             printf("%s\n", input[row]);
         }
 
         // Move to the next row.
@@ -175,9 +174,10 @@ int main(int argc, char **argv)
 
     if (DEBUG == 1)
     {
-        // printArray(input, processcount);
+         printArray(input, processcount);
     }
 
+    // Memory: Creates process block, process array block, each process array block has name block
     // Extract relevant information from the input into the process struct.
     if ((processes = parse(input, total_input_size, processcount)) == NULL)
     {
@@ -233,9 +233,15 @@ int main(int argc, char **argv)
 //        printf("ERROR: Job type for processes does not exist\n");
 //    }
 
-    // De-allocation fluff.
-    destroyInput(input, processcount);
-    destroyProcesses(processes, processcount);
+    if (input != NULL)
+    {
+        destroyInput(input, processcount);
+    }
+
+    if (processes != NULL)
+    {
+        destroyProcesses(processes, processcount);
+    }
 
     fclose(ifp);
 
