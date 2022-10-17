@@ -6,7 +6,7 @@
 #include "process.h"
 #include "scheduling.c"
 
-#define DEBUG 1
+#define DEBUG 0
 
 void swap(Processes *p, int i, int j)
 {
@@ -213,25 +213,23 @@ int main(int argc, char **argv)
         }
     }
 
-    roundRobin(processes);
-
     // CPU scheduling algorithms.
-//    if (processes->type == FCFS)
-//    {
-//        firstComeFirstServe(processes);
-//    }
-//    else if (processes->type == RR)
-//    {
-//        roundRobin(processes);
-//    }
-//    else if (processes->type == SJF)
-//    {
-//        shortestJobFirst(processes);
-//    }
-//    else
-//    {
-//        printf("ERROR: Job type for processes does not exist\n");
-//    }
+    if (processes->type == FCFS)
+    {
+        firstComeFirstServe(processes);
+    }
+    else if (processes->type == RR)
+    {
+        roundRobin(processes);
+    }
+    else if (processes->type == SJF)
+    {
+        shortestJobFirst(processes);
+    }
+    else
+    {
+        printf("ERROR: Job type for processes does not exist\n");
+    }
 
     if (input != NULL)
     {

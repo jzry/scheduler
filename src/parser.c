@@ -12,7 +12,7 @@
 #define PROCESS 4
 #define SUCCESS 5
 
-#define DEBUG 1
+#define DEBUG 0
 
 // Create a fully formed process block that contains a process array containing relevant processes.
 Processes *parse(char **input, int total_input_size, int MAX_PROCESS_COUNT)

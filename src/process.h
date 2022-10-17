@@ -4,8 +4,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#define DEBUG 1
-
 // FCFS = 0, SJF = 1, RR = 2.
 typedef enum JobType {FCFS, SJF, RR} JobType;
 
@@ -29,6 +27,9 @@ typedef struct process_node
 
     // The total duration of a process from arrival to finish statement.
     int turnaround;
+
+    // The arrival time frame.
+    int time;
 
     // Status of the process.
     Status status;
